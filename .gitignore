@@ -1,0 +1,7 @@
+# Don't save editor/os data to git
+.vscode
+.DS_Store
+
+# Don't sync wally-managed packages
+Packages
+ServerPackages

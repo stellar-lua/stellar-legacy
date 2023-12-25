@@ -1,0 +1,5 @@
+std = "roblox"
+
+[rules]
+global_usage = "allow"        # Purely for accessing Stellar via shared.Stellar
+multiple_statements = "allow"

@@ -1,0 +1,9 @@
+[package]
+name = "stellar-lua/stellar"
+version = "0.0.1"
+registry = "https://github.com/UpliftGames/wally-index"
+realm = "shared"
+
+[dependencies]
+Signal = "stravant/goodsignal@0.2.1"
+[server-dependencies]
