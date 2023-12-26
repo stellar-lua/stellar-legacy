@@ -2,6 +2,9 @@
     Stellar.lua
 ]]
 
+--- @class Stellar
+--- Game framework
+
 local Stellar = {}
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
@@ -151,6 +154,9 @@ function Stellar.Library(name)
     return nil
 end
 
+--- @param name string
+--- @param dontInit boolean
+--- Load a file with Stellar
 function Stellar.Get(name, dontInit)
     if loadedAssets[name] then
         if not dontInit then

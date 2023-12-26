@@ -2,6 +2,9 @@
 .vscode
 .DS_Store
 
+# Moonwave
+build
+
 # Don't sync wally-managed packages
 Packages
 ServerPackages
