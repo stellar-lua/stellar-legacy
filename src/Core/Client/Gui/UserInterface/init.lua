@@ -8,11 +8,8 @@ local Stellar = shared.Stellar
 
 local Network = Stellar.Get("Network")
 local Players = game:GetService("Players")
-local StarterGui = game:GetService("StarterGui")
 local CollectionService = game:GetService("CollectionService")
 local ClientUtility = Stellar.Get("ClientUtility")
-local PreferenceClient = Stellar.Get("PreferenceClient")
-local MinimapController = Stellar.Get("MinimapController")
 local Signal = Stellar.Get("Signal")
 local Player = Players.LocalPlayer
 
@@ -109,8 +106,7 @@ function UserInterface:_Import(obj)
 end
 
 function UserInterface:Init()
-    StarterGui:SetCoreGuiEnabled("PlayerList", false)
-
+    --StarterGui:SetCoreGuiEnabled("PlayerList", false)
     for _, frame in pairs(coreGui:GetChildren()) do
         local start = tick()
         UserInterface:_Import(frame)
@@ -118,42 +114,6 @@ function UserInterface:Init()
             warn(`[UserInterface] [Duration] {frame.Name} took {tick() - start} seconds!`)
         end
     end
-
-    local Hud = UserInterface:GetFrame("HUD")
-    local actualValue = PreferenceClient:GetPreference("Minimap")
-
-    local function SetHudButtonHeight(state)
-        for _, button in pairs({
-            Hud.Tabs.LockerButton,
-            Hud.Tabs.MenuButton,
-            Hud.Tabs.QuestsButton,
-            Hud.Tabs.ShopButton,
-        }) do
-            button.Position = UDim2.fromScale(button.Position.X.Scale, state and 0.282 or 0.02)
-        end
-        Hud.Controls.Position = UDim2.fromScale(0.012, state and 0.385 or 0.121)
-        Hud.Tabs.Position = UDim2.fromScale(0.01, state and 0.283 or 0.015)
-    end
-
-    MinimapController:Toggle(false)
-
-    PreferenceClient:PreferenceChanged("Minimap", function(newValue)
-        actualValue = newValue
-        MinimapController:Toggle(actualValue)
-        SetHudButtonHeight(actualValue)
-    end)
-    SetHudButtonHeight(PreferenceClient:GetPreference("Minimap"))
-
-    Player:GetAttributeChangedSignal("InMenu"):Connect(function()
-        if Player:GetAttribute("InMenu") then
-            MinimapController:Toggle(false)
-            SetHudButtonHeight(false)
-        else
-            task.wait(0.75)
-            MinimapController:Toggle(actualValue)
-            SetHudButtonHeight(actualValue)
-        end
-    end)
 
     Network:ObserveSignal("UserInterface", function(request: string, target: string)
         if request == "Show" then
@@ -202,14 +162,19 @@ function UserInterface:GetFrame(name): Frame?
     return coreGui:FindFirstChild(name)
 end
 
+function UserInterface:IsVisible(name: string)
+    if coreGui:FindFirstChild(name) then
+        return coreGui:FindFirstChild(name).Visible
+    end
+    return false
+end
+
 function UserInterface:HideAll()
     coreGui.Enabled = false
-    MinimapController:Toggle(false)
 end
 
 function UserInterface:ShowAll()
     coreGui.Enabled = true
-    MinimapController:Toggle(PreferenceClient:GetPreference("Minimap"))
 end
 
 function UserInterface:Get(name, fromCache)
@@ -230,7 +195,6 @@ end
 
 function UserInterface:Show(name, main)
     local interface = UserInterface:GetFrame(name)
-    -- warn("SHOW", interface)
 
     if interface then
         local module = UserInterface:Get(name, true)
@@ -265,7 +229,6 @@ end
 
 function UserInterface:Hide(name)
     local interface = UserInterface:GetFrame(name)
-    -- warn("HIDE", interface)
 
     if interface then
         local module = UserInterface:Get(name, true)

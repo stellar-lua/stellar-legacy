@@ -11,8 +11,8 @@ local StartTime = tick()
 Stellar.BulkLoad(ReplicatedStorage.ClientModules, ReplicatedStorage.SharedModules)
 
 Stellar.BulkGet(
-    "UserInterface"
-    -- Continue importing your client-side code here
+    "UserInterface",
+    "DoorClient"
 )
 
 Stellar.MarkAsLoaded()

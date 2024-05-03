@@ -55,6 +55,10 @@ function Interaction:Enable()
     self.Prompt.Enabled = true
 end
 
+function Interaction:SetDistance(distance)
+    self.Prompt.MaxActivationDistance = distance
+end
+
 function Interaction:SetDuration(duration)
     self.Prompt.HoldDuration = duration
 end

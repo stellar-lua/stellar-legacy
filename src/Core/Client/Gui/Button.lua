@@ -15,10 +15,8 @@ local UserInputService = game:GetService("UserInputService")
 local InterfaceUtility = Stellar.Get("InterfaceUtility")
 local ClientUtility = Stellar.Get("ClientUtility")
 local Signal = Stellar.Get("Signal")
-
 local Mouse = Players.LocalPlayer:GetMouse()
-local ButtonClickEffect = game.ReplicatedStorage.Assets.ButtonEffect
-local ButtonClickEffectParent = Players.LocalPlayer.PlayerGui.CoreGui:FindFirstChild("_ButtonEffect")
+
 
 function Button.new(instance, clickEffect, callBackDelay, ignoreHover)
     local cooldown = false
@@ -30,7 +28,6 @@ function Button.new(instance, clickEffect, callBackDelay, ignoreHover)
     local self = setmetatable({
         instance = instance,
         originalSize = instance.Size,
-        shouldShowEffect = not instance:FindFirstAncestorOfClass("SurfaceGui"),
         callBackDelay = callBackDelay or 0,
         maid = Maid.new(),
         XboxButton = nil,
@@ -46,22 +43,6 @@ function Button.new(instance, clickEffect, callBackDelay, ignoreHover)
 
     local function Clicked()
         self.Clicked:Fire()
-
-        if self.shouldShowEffect then
-            local effect = ButtonClickEffect:Clone()
-            effect.Position = UDim2.fromOffset(Mouse.X, Mouse.Y)
-            effect.Size = UDim2.fromOffset(0, 0)
-            effect.Parent = ButtonClickEffectParent
-
-            TweenService:Create(effect, TweenInfo.new(0.2), {
-                Size = UDim2.fromOffset(60, 60),
-                ImageTransparency = 1,
-            }):Play()
-
-            task.delay(0.25, function()
-                effect:Destroy()
-            end)
-        end
 
         if Players.LocalPlayer:GetAttribute("DeathScreen") then
             return

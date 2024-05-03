@@ -38,7 +38,7 @@ function Utility:TweenTransparency(Object, Transparency, TweenTime, IsBackground
         if Object:IsA("UIStroke") then
             Cache.Transparency = Object.Transparency
         end
-        if Cache ~= {} then
+        if Cache ~= nil then
             self.Cache[Object] = Cache
         end
     end

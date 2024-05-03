@@ -73,6 +73,7 @@ function Network:GetEndpoint(name, class)
         return Network:GetEndpoint(name, class)
     end
 end
+
 function Network:ObserveSignal(name, func)
     return Promise.try(function()
         return Network:GetEndpoint(name, "RemoteEvent")
@@ -90,6 +91,7 @@ function Network:ObserveSignal(name, func)
         end
     end)
 end
+
 function Network:Signal(name, ...)
     local endpoint = Network:GetEndpoint(name, "RemoteEvent")
     assert(endpoint, ("[Network] Another endpoint with name %s exists of a different class."):format(name))
@@ -102,9 +104,11 @@ function Network:Signal(name, ...)
         endpoint:FireServer(...)
     end
 end
+
 function Network:SignalAsync(name, ...)
     return Promise.try(Network.Signal, Network, name, ...)
 end
+
 function Network:SignalAll(name, ...)
     local endpoint = Network:GetEndpoint(name, "RemoteEvent")
     assert(endpoint, ("[Network] Another endpoint with name %s exists of a different class."):format(name))
@@ -114,6 +118,7 @@ function Network:SignalAll(name, ...)
         warn("[Network] 'SignalAll' is intended for firing all clients, this cannot be used on the client.")
     end
 end
+
 function Network:OnInvoke(name: string, func: (player: Player, ...any) -> nil)
     local endpoint = Network:GetEndpoint(name, "RemoteFunction")
     assert(endpoint, ("[Network] Another endpoint with name %s exists of a different class."):format(name))
@@ -156,6 +161,7 @@ function Network:Invoke(name, ...)
         return table.unpack(result)
     end
 end
+
 function Network:InvokePromise(name, ...)
     local args = { ... }
     return Promise.new(function(resolve, reject)
@@ -167,6 +173,7 @@ function Network:InvokePromise(name, ...)
         end
     end)
 end
+
 function Network:Reserve(...)
     for _, data in pairs({
         ...,
@@ -175,4 +182,5 @@ function Network:Reserve(...)
         Stellar.Verbose(("[Network] Reserved endpoint '%s' with class %s"):format(data[1], data[2]))
     end
 end
+
 return Network
